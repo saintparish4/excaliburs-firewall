@@ -1,0 +1,70 @@
+[package]
+name = "packet-processor"
+version = "0.1.0"
+edition = "2021"
+description = "High-performance packet processing engine for Excalibur Firewall"
+authors = ["Excalibur Firewall Team"]
+repository = "https://github.com/your-org/excalibur-firewall"
+license = "MIT"
+keywords = ["firewall", "network", "security", "packet-processing"]
+categories = ["network-programming", "security"]
+
+[dependencies]
+# Core async and error handling
+tokio = { version = "1.35", features = ["full"] }
+anyhow = "1.0"
+thiserror = "2.0.12"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Network processing
+pnet = "0.35"
+pcap = { version = "2.2.0", optional = true }
+
+# Security
+ring = "0.17"
+aes-gcm = "0.10"
+
+# Concurrency and performance
+dashmap = "6.1.0"
+rayon = "1.8"
+crossbeam-channel = "0.5"
+parking_lot = "0.12"
+
+# Logging and monitoring
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+metrics = { version = "0.24.2" }
+metrics-exporter-prometheus = { version = "0.17.2" }
+
+# Time and configuration
+chrono = { version = "0.4", features = ["serde"] }
+config = "0.15.13"
+toml = "0.9.2"
+
+# Development and testing
+criterion = { version = "0.6.0", optional = true }
+mockall = { version = "0.13.1", optional = true }
+proptest = { version = "1.4", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = ["full"]
+full = ["pcap"]
+minimal = []
+dev = ["criterion", "mockall", "proptest"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
